@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>रक्षाबंधन की शुभकामनाएँ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2&family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+      background: linear-gradient(-45deg, #32043d, #0a1547, #3b005c, #1b1b49);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      color: white;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50% }
+      50% { background-position: 100% 50% }
+      100% { background-position: 0% 50% }
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-family: 'Baloo 2', cursive;
+      font-size: 3rem;
+      color: gold;
+      text-shadow: 0 0 15px gold;
+      margin-top: 1rem;
+    }
+
+    .rakhi-img {
+      width: 100px;
+      margin: 0 auto;
+    }
+
+    .input-box {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 400px;
+      margin: 2rem auto;
+    }
+
+    input {
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      background: gold;
+      color: #2d0040;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #ffd700;
+    }
+
+    .card {
+      margin-top: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.1);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      display: none;
+    }
+
+    .share-btn {
+      margin-top: 1rem;
+      display: none;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .sound-toggle {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 5;
+      cursor: pointer;
+    }
+
+    .sound-toggle img {
+      width: 30px;
+    }
+
+    .input-section {
+      transition: all 0.5s ease;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+
+  <!-- Sound Toggle -->
+  <div class="sound-toggle" onclick="toggleSound()">
+    <img id="soundIcon" src="https://img.icons8.com/ios-filled/50/ffffff/mute.png"/>
+  </div>
+
+  <!-- Music (Local) -->
+  <audio id="bg-music" autoplay loop>
+    <source src="music.mp3" type="audio/mp3" />
+  </audio>
+
+  <div class="container">
+    <img class="rakhi-img" src="rakhi.gif" alt="Rakhi" />
+    <h1>रक्षाबंधन की शुभकामनाएँ!</h1>
+
+    <div class="input-box input-section" id="inputSection">
+      <input id="yourName" type="text" placeholder="आपका नाम *" required>
+      <input id="siblingName" type="text" placeholder="आपके भाई/बहन का नाम (वैकल्पिक)">
+      <button onclick="generateMessage()">अपनी राखी की शुभकामनाएँ बनाएँ</button>
+    </div>
+
+    <div class="card" id="messageCard">
+      <p id="wishText"></p>
+      <button class="share-btn" onclick="shareOnWhatsApp()">व्हाट्सएप पर शेयर करें</button>
+    </div>
+  </div>
+
+  <script>
+    const music = document.getElementById("bg-music");
+    let isMuted = false;
+    function toggleSound() {
+      isMuted = !isMuted;
+      music.muted = isMuted;
+      document.getElementById("soundIcon").src = isMuted
+        ? "https://img.icons8.com/ios-filled/50/ffffff/mute.png"
+        : "https://img.icons8.com/ios-filled/50/ffffff/speaker.png";
+    }
+
+    const messages = [
+      "प्रिय {name}, तेरी हर मुस्कान में मेरा सुकून है। रक्षाबंधन की ढेरों शुभकामनाएँ! - {yourName}",
+      "राखी सिर्फ एक धागा नहीं, हमारी आत्मा का अटूट बंधन है। रक्षाबंधन मुबारक {name}! – {yourName}",
+      "{name}, बचपन की लड़ाइयाँ आज सबसे प्यारी यादें बन गई हैं। Happy Rakhi! – {yourName}",
+      "इस रक्षाबंधन पर वादा है, चाहे जो हो जाए, हमेशा साथ रहूँगा/रहूँगी। तुम्हारा {yourName}",
+      "खुशियों से भरी तेरी दुनिया हो, मेरे दुआओं का साथ हमेशा हो। शुभ रक्षाबंधन! – {yourName}",
+      "राखी के इस पवित्र दिन पर, तेरे लिए ढेर सारा प्यार भेज रहा हूँ/रही हूँ – {yourName}",
+      "तू सबसे बड़ी ताकत है मेरी, तेरे बिना ज़िन्दगी अधूरी लगती है। Happy Rakhi, {name}! – {yourName}",
+      "{name}, हर मोड़ पर तेरा साथ मेरे लिए एक वरदान है। रक्षाबंधन की शुभकामनाएँ! – {yourName}",
+      "तेरी हँसी मेरी जान है, तेरे आँसू मेरी हार। रक्षाबंधन पर बस इतनी दुआ – तू हमेशा खुश रह। – {yourName}",
+      "हमारे झगड़े ही हमारे प्यार की गहराई दिखाते हैं। Happy Rakhi {name}! – {yourName}",
+      "हर साल राखी के इस दिन, तुझे गले लगाने का मन करता है। मिस यू – {yourName}",
+      "बचपन की मीठी यादों को आज फिर से जीने का दिन है। शुभ रक्षाबंधन – {yourName}",
+      "तेरी राखी के धागे ने मुझे हमेशा मजबूत बनाया है। Love you {name} – {yourName}",
+      "{name}, तू सिर्फ बहन/भाई नहीं, मेरी सबसे अच्छी दोस्त है। Rakhi Mubarak – {yourName}",
+      "रिश्ते कई हैं, पर भाई-बहन जैसा कोई नहीं। शुभकामनाएँ – {yourName}",
+      "जब भी थका होता हूँ, तेरी याद मुस्कान ला देती है। Happy Rakhi {name} – {yourName}",
+      "तेरे बिना ये त्योहार अधूरा लगता है। जल्दी मिलना, और राखी बाँधना। – {yourName}",
+      "हर बार की तरह इस बार भी तेरे लिए दिल से दुआ निकली है। रक्षाबंधन की शुभकामनाएँ – {yourName}",
+      "तेरे प्यार और विश्वास ने मुझे कभी टूटने नहीं दिया। Rakhi Blessings {name} – {yourName}",
+      "भाई-बहन का रिश्ता अनमोल है, इस राखी पर बस इतना कहूँगा – I’m lucky to have you! – {yourName}"
+    ];
+
+    function generateMessage() {
+      const yourName = document.getElementById("yourName").value.trim();
+      const siblingName = document.getElementById("siblingName").value.trim();
+      if (!yourName) {
+        alert("कृपया अपना नाम भरें।");
+        return;
+      }
+
+      let msgTemplate = messages[Math.floor(Math.random() * messages.length)];
+      const message = siblingName
+        ? msgTemplate.replace("{name}", siblingName).replace("{yourName}", yourName)
+        : `रक्षाबंधन की शुभकामनाएँ! भाई-बहन का यह बंधन सदा मजबूत और मधुर बना रहे। - ${yourName}`;
+
+      document.getElementById("wishText").innerText = message;
+      document.getElementById("messageCard").style.display = "block";
+      document.querySelector(".share-btn").style.display = "inline-block";
+
+      // पूरी input section hide करो
+      document.getElementById("inputSection").classList.add("hidden");
+    }
+
+    function shareOnWhatsApp() {
+      const msg = document.getElementById("wishText").innerText;
+      const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+
+    // Golden Particle Effect
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particlesArray = [];
+    const numberOfParticles = 100;
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = Math.random() * 1 - 0.5;
+        this.speedY = Math.random() * 1 - 0.5;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+        if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+      }
+
+      draw() {
+        ctx.fillStyle = 'gold';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      for (let i = 0; i < numberOfParticles; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particlesArray.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+
+    initParticles();
+    animateParticles();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
