@@ -121,17 +121,47 @@
     .hidden {
       display: none;
     }
+
+    /* Typing effect */
+    #wishText.typing {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid gold;
+      animation: typing 3s steps(40, end), blink 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent }
+    }
+
+    .top-left {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      z-index: 5;
+    }
   </style>
 </head>
 <body>
   <canvas id="particles"></canvas>
 
-  <!-- Sound Toggle -->
+  <!-- 🌐 Language toggle (placeholder) -->
+  <div class="top-left">
+    <button onclick="toggleLanguage()">🌐 भाषा</button>
+  </div>
+
+  <!-- 🔊 Sound Toggle -->
   <div class="sound-toggle" onclick="toggleSound()">
     <img id="soundIcon" src="https://img.icons8.com/ios-filled/50/ffffff/mute.png"/>
   </div>
 
-  <!-- Music (only play on button click) -->
+  <!-- 🎵 Music -->
   <audio id="bg-music" loop>
     <source src="music.mp3" type="audio/mp3" />
   </audio>
@@ -148,8 +178,10 @@
 
     <div class="card" id="messageCard">
       <p id="wishText"></p>
-      <button class="share-btn" onclick="shareOnWhatsApp()">व्हाट्सएप पर शेयर करें</button>
-      <button class="download-btn" onclick="saveAsImage()">Download Image</button>
+      <button class="share-btn" onclick="shareOnWhatsApp()">📱 व्हाट्सएप पर शेयर करें</button>
+      <button class="download-btn" onclick="saveAsImage()">⬇️ Download Image</button>
+      <button class="download-btn" onclick="generateMessage()">🔁 नया मैसेज</button>
+      <button style="margin-top: 10px;" onclick="resetForm()">🔄 फिर से बनाएँ</button>
     </div>
   </div>
 
@@ -165,39 +197,36 @@
         : "https://img.icons8.com/ios-filled/50/ffffff/speaker.png";
     }
 
+    function toggleLanguage() {
+      alert("Language switching feature coming soon!");
+    }
+
     const messages = [
       "प्रिय {name} बहन, तेरी हर मुस्कान में मेरा सुकून है। रक्षाबंधन की ढेरों शुभकामनाएँ! - {yourName}",
-      "राखी सिर्फ एक धागा नहीं, हमारी आत्मा का अटूट बंधन है। रक्षाबंधन मुबारक {name}!बहन – {yourName}",
+      "राखी सिर्फ एक धागा नहीं, हमारी आत्मा का अटूट बंधन है। रक्षाबंधन मुबारक {name}! – {yourName}",
       "{name} बहन, बचपन की लड़ाइयाँ आज सबसे प्यारी यादें बन गई हैं। Happy Rakhi! – {yourName}",
       "इस रक्षाबंधन पर वादा है, चाहे जो हो जाए, हमेशा साथ रहूँगा/रहूँगी। तुम्हारा {yourName}",
       "खुशियों से भरी तेरी दुनिया हो, मेरे दुआओं का साथ हमेशा हो। शुभ रक्षाबंधन! – {yourName}",
       "राखी के इस पवित्र दिन पर, तेरे लिए ढेर सारा प्यार भेज रहा हूँ/रही हूँ – {yourName}",
-      "तू सबसे बड़ी ताकत है मेरी, तेरे बिना ज़िन्दगी अधूरी लगती है। Happy Rakhi, {name}!बहन – {yourName}",
+      "तू सबसे बड़ी ताकत है मेरी, तेरे बिना ज़िन्दगी अधूरी लगती है। Happy Rakhi, {name}! – {yourName}",
       "{name} बहन, हर मोड़ पर तेरा साथ मेरे लिए एक वरदान है। रक्षाबंधन की शुभकामनाएँ! – {yourName}",
       "तेरी हँसी मेरी जान है, तेरे आँसू मेरी हार। रक्षाबंधन पर बस इतनी दुआ – तू हमेशा खुश रह। – {yourName}",
-      "हमारे झगड़े ही हमारे प्यार की गहराई दिखाते हैं। Happy Rakhi {name}!बहन – {yourName}",
+      "हमारे झगड़े ही हमारे प्यार की गहराई दिखाते हैं। Happy Rakhi {name}! – {yourName}",
       "हर साल राखी के इस दिन, तुझे गले लगाने का मन करता है। मिस यू – {yourName}",
       "बचपन की मीठी यादों को आज फिर से जीने का दिन है। शुभ रक्षाबंधन – {yourName}",
       "तेरी राखी के धागे ने मुझे हमेशा मजबूत बनाया है। Love you {name} – {yourName}",
       "{name} बहन, तू सिर्फ बहन/भाई नहीं, मेरी सबसे अच्छी दोस्त है। Rakhi Mubarak – {yourName}",
       "रिश्ते कई हैं, पर भाई-बहन जैसा कोई नहीं। शुभकामनाएँ – {yourName}",
-      "जब भी थका होता हूँ, तेरी याद मुस्कान ला देती है। Happy Rakhi {name} बहन – {yourName}",
+      "जब भी थका होता हूँ, तेरी याद मुस्कान ला देती है। Happy Rakhi {name} – {yourName}",
       "तेरे बिना ये त्योहार अधूरा लगता है। जल्दी मिलना, और राखी बाँधना। – {yourName}",
       "हर बार की तरह इस बार भी तेरे लिए दिल से दुआ निकली है। रक्षाबंधन की शुभकामनाएँ – {yourName}",
-      "तेरे प्यार और विश्वास ने मुझे कभी टूटने नहीं दिया। Rakhi Blessings {name} बहन – {yourName}",
+      "तेरे प्यार और विश्वास ने मुझे कभी टूटने नहीं दिया। Rakhi Blessings {name} – {yourName}",
       "भाई-बहन का रिश्ता अनमोल है, इस राखी पर बस इतना कहूँगा – I’m lucky to have you! – {yourName}"
     ];
 
     function generateMessage() {
-      // Play music
       music.play();
-
-      // Confetti effect
-      confetti({
-        particleCount: 150,
-        spread: 100,
-        origin: { y: 0.6 }
-      });
+      confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
 
       const yourName = document.getElementById("yourName").value.trim();
       const siblingName = document.getElementById("siblingName").value.trim();
@@ -211,11 +240,29 @@
         ? msgTemplate.replace("{name}", siblingName).replace("{yourName}", yourName)
         : `रक्षाबंधन की शुभकामनाएँ! भाई-बहन का यह बंधन सदा मजबूत और मधुर बना रहे। - ${yourName}`;
 
-      document.getElementById("wishText").innerText = message;
+      const wishText = document.getElementById("wishText");
+      wishText.classList.remove("typing");
+      wishText.innerText = "";
+      setTimeout(() => {
+        wishText.innerText = message;
+        wishText.classList.add("typing");
+      }, 100);
+
       document.getElementById("messageCard").style.display = "block";
       document.querySelector(".share-btn").style.display = "inline-block";
       document.querySelector(".download-btn").style.display = "inline-block";
       document.getElementById("inputSection").classList.add("hidden");
+    }
+
+    function resetForm() {
+      document.getElementById("inputSection").classList.remove("hidden");
+      document.getElementById("messageCard").style.display = "none";
+      document.querySelector(".share-btn").style.display = "none";
+      document.querySelector(".download-btn").style.display = "none";
+      document.getElementById("yourName").value = "";
+      document.getElementById("siblingName").value = "";
+      document.getElementById("wishText").innerText = "";
+      music.pause();
     }
 
     function shareOnWhatsApp() {
@@ -236,7 +283,7 @@
       });
     }
 
-    // Golden Particle Background
+    // 🎇 Particle Background
     const canvas = document.getElementById('particles');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
@@ -253,14 +300,12 @@
         this.speedX = Math.random() * 1 - 0.5;
         this.speedY = Math.random() * 1 - 0.5;
       }
-
       update() {
         this.x += this.speedX;
         this.y += this.speedY;
         if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
         if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
       }
-
       draw() {
         ctx.fillStyle = 'gold';
         ctx.beginPath();
@@ -292,9 +337,11 @@
       canvas.height = window.innerHeight;
     });
   </script>
+
+  <!-- Adsterra Code (as given) -->
+  <div style="margin-top: 20px;">
+    <script async="async" data-cfasync="false" src="//pl27272361.profitableratecpm.com/a7caadbd2ce7648e43de93a51dc0e812/invoke.js"></script>
+    <div id="container-a7caadbd2ce7648e43de93a51dc0e812"></div>
+  </div>
 </body>
-<!-- यह body tag के अंत में जोड़ें -->
-<div style="margin-top: 20px;">
- <script async="async" data-cfasync="false" src="//pl27272361.profitableratecpm.com/a7caadbd2ce7648e43de93a51dc0e812/invoke.js"></script>
-<div id="container-a7caadbd2ce7648e43de93a51dc0e812"></div>
 </html>
