@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>रक्षाबंधन की शुभकामनाएँ</title>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2&family=Poppins&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     body {
       margin: 0;
@@ -87,7 +89,7 @@
       display: none;
     }
 
-    .share-btn {
+    .share-btn, .download-btn {
       margin-top: 1rem;
       display: none;
     }
@@ -128,8 +130,8 @@
     <img id="soundIcon" src="https://img.icons8.com/ios-filled/50/ffffff/mute.png"/>
   </div>
 
-  <!-- Music (Local) -->
-  <audio id="bg-music" autoplay loop>
+  <!-- Music (only play on button click) -->
+  <audio id="bg-music" loop>
     <source src="music.mp3" type="audio/mp3" />
   </audio>
 
@@ -146,12 +148,14 @@
     <div class="card" id="messageCard">
       <p id="wishText"></p>
       <button class="share-btn" onclick="shareOnWhatsApp()">व्हाट्सएप पर शेयर करें</button>
+      <button class="download-btn" onclick="saveAsImage()">Download Image</button>
     </div>
   </div>
 
   <script>
     const music = document.getElementById("bg-music");
     let isMuted = false;
+
     function toggleSound() {
       isMuted = !isMuted;
       music.muted = isMuted;
@@ -184,6 +188,16 @@
     ];
 
     function generateMessage() {
+      // Play music
+      music.play();
+
+      // Confetti effect
+      confetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.6 }
+      });
+
       const yourName = document.getElementById("yourName").value.trim();
       const siblingName = document.getElementById("siblingName").value.trim();
       if (!yourName) {
@@ -199,18 +213,29 @@
       document.getElementById("wishText").innerText = message;
       document.getElementById("messageCard").style.display = "block";
       document.querySelector(".share-btn").style.display = "inline-block";
-
-      // पूरी input section hide करो
+      document.querySelector(".download-btn").style.display = "inline-block";
       document.getElementById("inputSection").classList.add("hidden");
     }
 
     function shareOnWhatsApp() {
       const msg = document.getElementById("wishText").innerText;
-      const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+      const shareURL = "https://akhiles76.github.io/rakhi-wishes/";
+      const fullMsg = `${msg}\n\nशेयर करें: ${shareURL}`;
+      const url = `https://wa.me/?text=${encodeURIComponent(fullMsg)}`;
       window.open(url, 'blank');
     }
 
-    // Golden Particle Effect
+    function saveAsImage() {
+      const card = document.getElementById("messageCard");
+      html2canvas(card).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'rakhi_wish.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+
+    // Golden Particle Background
     const canvas = document.getElementById('particles');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
