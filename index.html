@@ -148,11 +148,6 @@
 <body>
   <canvas id="particles"></canvas>
 
-  <!-- 🌐 Language toggle (placeholder) -->
-  <div class="top-left">
-    <button onclick="toggleLanguage()">🌐 भाषा</button>
-  </div>
-
   <!-- 🔊 Sound Toggle -->
   <div class="sound-toggle" onclick="toggleSound()">
     <img id="soundIcon" src="https://img.icons8.com/ios-filled/50/ffffff/mute.png"/>
@@ -176,7 +171,6 @@
     <div class="card" id="messageCard">
       <p id="wishText"></p>
       <button class="share-btn" onclick="shareOnWhatsApp()">📱 व्हाट्सएप पर शेयर करें</button>
-      <button class="download-btn" onclick="saveAsImage()">⬇️ Download Image</button>
       <button class="download-btn" onclick="generateMessage()">🔁 नया मैसेज</button>
       <button style="margin-top: 10px;" onclick="resetForm()">🔄 फिर से बनाएँ</button>
     </div>
@@ -192,10 +186,6 @@
       document.getElementById("soundIcon").src = isMuted
         ? "https://img.icons8.com/ios-filled/50/ffffff/mute.png"
         : "https://img.icons8.com/ios-filled/50/ffffff/speaker.png";
-    }
-
-    function toggleLanguage() {
-      alert("Language switching feature coming soon!");
     }
 
     const messages = [
@@ -268,16 +258,6 @@
       const fullMsg = `${msg}\n\nशेयर करें: ${shareURL}`;
       const url = `https://wa.me/?text=${encodeURIComponent(fullMsg)}`;
       window.open(url, 'blank');
-    }
-
-    function saveAsImage() {
-      const card = document.getElementById("messageCard");
-      html2canvas(card).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'rakhi_wish.png';
-        link.href = canvas.toDataURL();
-        link.click();
-      });
     }
 
     // 🎇 Particle Background
