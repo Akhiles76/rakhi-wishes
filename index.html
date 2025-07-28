@@ -9,11 +9,12 @@
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      overflow: hidden;
+      overflow-y: auto;
       background: linear-gradient(-45deg, #32043d, #0a1547, #3b005c, #1b1b49);
       background-size: 400% 400%;
       animation: gradient 15s ease infinite;
       color: white;
+      padding: 1rem;
     }
 
     @keyframes gradient {
@@ -26,7 +27,7 @@
       position: relative;
       z-index: 2;
       text-align: center;
-      padding: 2rem;
+      padding: 2rem 1rem;
     }
 
     h1 {
@@ -81,10 +82,21 @@
       padding: 2rem;
       border-radius: 16px;
       box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.1);
-      max-width: 600px;
+      max-width: 90vw;
+      width: 100%;
+      box-sizing: border-box;
       margin-left: auto;
       margin-right: auto;
       display: none;
+      word-wrap: break-word;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    #wishText {
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      line-height: 1.6;
     }
 
     .share-btn, .download-btn {
@@ -119,7 +131,6 @@
       display: none;
     }
 
-    /* Typing effect */
     #wishText.typing {
       display: inline-block;
       white-space: nowrap;
@@ -137,23 +148,34 @@
       50% { border-color: transparent }
     }
 
-    .top-left {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      z-index: 5;
+    @media screen and (max-width: 480px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      input, button {
+        font-size: 0.95rem;
+        padding: 0.6rem;
+      }
+
+      .card {
+        padding: 1rem;
+        font-size: 0.95rem;
+      }
+
+      .rakhi-img {
+        width: 150px;
+      }
     }
   </style>
 </head>
 <body>
   <canvas id="particles"></canvas>
 
-  <!-- 🔊 Sound Toggle -->
   <div class="sound-toggle" onclick="toggleSound()">
     <img id="soundIcon" src="https://img.icons8.com/ios-filled/50/ffffff/mute.png"/>
   </div>
 
-  <!-- 🎵 Music -->
   <audio id="bg-music" loop>
     <source src="music.mp3" type="audio/mp3" />
   </audio>
@@ -197,28 +219,26 @@
       "तू सबसे बड़ी ताकत है मेरी, तेरे बिना ज़िन्दगी अधूरी लगती है। Happy Rakhi, {name}! – {yourName}",
       "{name} बहन, हर मोड़ पर तेरा साथ मेरे लिए एक वरदान है। रक्षाबंधन की शुभकामनाएँ! – {yourName}",
       "तेरी हँसी मेरी जान है, तेरे आँसू मेरी हार। रक्षाबंधन पर बस इतनी दुआ – तू हमेशा खुश रह। – {yourName}",
-      "हमारे झगड़े ही हमारे प्यार की गहराई दिखाते हैं। Happy Rakhi {name}! – {yourName}",
       "हर साल राखी के इस दिन, तुझे गले लगाने का मन करता है। मिस यू – {yourName}",
       "बचपन की मीठी यादों को आज फिर से जीने का दिन है। शुभ रक्षाबंधन – {yourName}",
       "तेरी राखी के धागे ने मुझे हमेशा मजबूत बनाया है। Love you {name} – {yourName}",
       "{name} बहन, तू सिर्फ बहन/भाई नहीं, मेरी सबसे अच्छी दोस्त है। Rakhi Mubarak – {yourName}",
       "रिश्ते कई हैं, पर भाई-बहन जैसा कोई नहीं। शुभकामनाएँ – {yourName}",
-      "जब भी थका होता हूँ, तेरी याद मुस्कान ला देती है। Happy Rakhi {name} – {yourName}",
       "तेरे बिना ये त्योहार अधूरा लगता है। जल्दी मिलना, और राखी बाँधना। – {yourName}",
-      "हर बार की तरह इस बार भी तेरे लिए दिल से दुआ निकली है। रक्षाबंधन की शुभकामनाएँ – {yourName}",
       "तेरे प्यार और विश्वास ने मुझे कभी टूटने नहीं दिया। Rakhi Blessings {name} – {yourName}",
-      "भाई-बहन का रिश्ता अनमोल है, इस राखी पर बस इतना कहूँगा – I’m lucky to have you! – {yourName}"
+      "तेरे लिए दिल से निकली हर दुआ इस राखी पर तेरे पास पहुँचे। – {yourName}",
+      "तू मेरे जीवन का उजाला है, रक्षाबंधन की हार्दिक शुभकामनाएँ {name} – {yourName}",
+      "तेरी राखी की याद हर साल मुझे भावुक कर देती है। – {yourName}"
     ];
 
     function generateMessage() {
       music.play();
-setTimeout(() => {
-  music.pause();
-  music.currentTime = 0;
-}, 10000); // Stop after 10 seconds
+      setTimeout(() => {
+        music.pause();
+        music.currentTime = 0;
+      }, 10000);
 
-confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
-
+      confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
 
       const yourName = document.getElementById("yourName").value.trim();
       const siblingName = document.getElementById("siblingName").value.trim();
@@ -229,7 +249,7 @@ confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
 
       let msgTemplate = messages[Math.floor(Math.random() * messages.length)];
       const message = siblingName
-        ? msgTemplate.replace("{name}", siblingName).replace("{yourName}", yourName)
+        ? msgTemplate.replaceAll("{name}", siblingName).replaceAll("{yourName}", yourName)
         : `रक्षाबंधन की शुभकामनाएँ! भाई-बहन का यह बंधन सदा मजबूत और मधुर बना रहे। - ${yourName}`;
 
       const wishText = document.getElementById("wishText");
@@ -241,20 +261,17 @@ confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
       }, 100);
 
       document.getElementById("messageCard").style.display = "block";
-      document.querySelector(".share-btn").style.display = "inline-block";
-      document.querySelector(".download-btn").style.display = "inline-block";
+      document.querySelectorAll(".share-btn, .download-btn").forEach(btn => btn.style.display = "inline-block");
       document.getElementById("inputSection").classList.add("hidden");
     }
 
-    function resetForm() {
-      document.getElementById("inputSection").classList.remove("hidden");
-      document.getElementById("messageCard").style.display = "none";
-      document.querySelector(".share-btn").style.display = "none";
-      document.querySelector(".download-btn").style.display = "none";
-      document.getElementById("yourName").value = "";
-      document.getElementById("siblingName").value = "";
-      document.getElementById("wishText").innerText = "";
-      music.pause();
+    function saveAsImage() {
+      html2canvas(document.getElementById("messageCard")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "rakhi-wish.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
     }
 
     function shareOnWhatsApp() {
@@ -265,7 +282,6 @@ confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
       window.open(url, 'blank');
     }
 
-    // 🎇 Particle Background
     const canvas = document.getElementById('particles');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
@@ -320,7 +336,6 @@ confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
     });
   </script>
 
-  <!-- Adsterra Code (as given) -->
   <div style="margin-top: 20px;">
     <script async="async" data-cfasync="false" src="//pl27272361.profitableratecpm.com/a7caadbd2ce7648e43de93a51dc0e812/invoke.js"></script>
     <div id="container-a7caadbd2ce7648e43de93a51dc0e812"></div>
