@@ -212,7 +212,13 @@
 
     function generateMessage() {
       music.play();
-      confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+setTimeout(() => {
+  music.pause();
+  music.currentTime = 0;
+}, 10000); // Stop after 10 seconds
+
+confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+
 
       const yourName = document.getElementById("yourName").value.trim();
       const siblingName = document.getElementById("siblingName").value.trim();
